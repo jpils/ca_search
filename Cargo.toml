@@ -4,3 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+clap = "4.6.1"
+nalgebra = "0.35.0"
+thiserror = "2.0.18"
+tokio = { version = "1.52.3", features = ["full"] }
+
+[dev-dependencies]
+anyhow = "1.0.102"

@@ -49,6 +49,7 @@
 				devShells.default = pkgs.mkShell {
 					packages = [
 						toolchain
+						pkgs.bacon
 					];
 
 					# Helps rust-analyzer find std sources
