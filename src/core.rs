@@ -58,11 +58,11 @@ pub fn get_ratios(reference: f64, n: u32, step: f64) -> Result<Vec<f64> > {
         return Err(anyhow!("ratios_count must be divisible by 2"));
     }
     let lower = (1..=n/2)
-        .map(|x| x as f64 *step - reference)
+        .map(|x| reference - x as f64 *step)
         .collect::<Vec<_>>();
 
     let upper = (0..n/2)
-        .map(|x| x as f64 * step + reference)
+        .map(|x| reference + x as f64 * step)
         .collect::<Vec<_>>();
 
     let mut lower = lower;
@@ -85,10 +85,9 @@ pub fn get_positions(lines: &mut Lines<BufReader<File>>) -> Result<Vec<[f64; 3]>
     
     let mut positions = Vec::new();
     for line in lines.by_ref() {
-        println!("{line:#?}");
         let vec = line?
             .split_whitespace()
-            .map(|s| s.parse::<f64>().unwrap())
+            .filter_map(|s| s.parse::<f64>().ok())
             .collect::<Vec<_>>();
 
         positions.push(
@@ -114,8 +113,6 @@ pub fn save_poscars(
     };
 
     for (ratio, matrix) in ratios.iter().zip(cell_matrices) {
-
-        println!("here {ratio}");
         let dir = create_dir(ratio, init_path_str, cwd.clone())?;
         write_poscars(dir.join("POSCAR"), matrix, positions)?;
     }
