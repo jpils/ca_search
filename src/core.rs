@@ -125,7 +125,6 @@ fn create_dir(ratio: &f64, init: &str, cwd: PathBuf) -> Result<PathBuf> {
     };
 
     let path = format!("{cwd_str}/k_{ratio}");
-    println!("{cwd_str}");
 
     let status = Command::new("cp")
         .arg("-r")
