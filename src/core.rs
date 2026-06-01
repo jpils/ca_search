@@ -1,7 +1,7 @@
 use std::fs::{File};
 use std::process::{Command};
 use std::io::{BufReader, BufWriter, Lines, Write};
-use anyhow::{Context, Ok, Result, anyhow};
+use anyhow::{Context, Ok, Result, anyhow, ensure};
 use std::path::PathBuf;
 
 pub fn get_volume(lines: &mut Lines<BufReader<File>>) -> Option<f64> {
@@ -111,11 +111,13 @@ fn create_dir(ratio: &f64, init: &str, cwd: PathBuf) -> Result<PathBuf> {
     let path = format!("{cwd_str}/k_{ratio}");
     println!("{cwd_str}");
 
-    let res = Command::new("cp")
+    let status = Command::new("cp")
         .arg("-r")
         .arg(format!("{}", init))
         .arg(&path)
-        .output()?;
+        .status()?;
+        
+    ensure!(status.success(), "Failed to copy {:?} to {:?}", init, path);
 
     Ok(PathBuf::from(path))
 }
