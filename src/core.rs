@@ -53,6 +53,24 @@ pub fn get_new_matrix(
     new_matrix
 }
 
+pub fn get_ratios(reference: f64, n: u32, step: f64) -> Result<Vec<f64> > {
+    if !n.is_multiple_of(2) {
+        return Err(anyhow!("ratios_count must be divisible by 2"));
+    }
+    let lower = (1..=n/2)
+        .map(|x| x as f64 *step - reference)
+        .collect::<Vec<_>>();
+
+    let upper = (0..n/2)
+        .map(|x| x as f64 * step + reference)
+        .collect::<Vec<_>>();
+
+    let mut lower = lower;
+    lower.extend(upper);
+
+    Ok(lower)
+}
+
 pub fn get_lattice_params(volume: f64, ratio: f64) -> (f64, f64) {
     let a = (volume / ratio).powf(1.0/3.0);
     let c = ratio * a;

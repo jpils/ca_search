@@ -1,7 +1,7 @@
 use clap::Parser;
 use std::env;
 use std::path::PathBuf;
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -30,8 +30,14 @@ pub struct CliArgs {
     #[arg(long, conflicts_with = "outcar")] 
     pub volume: Option<f64>,
 
-    #[arg(long, num_args = 1.., required = true)]
-    pub ratios: Vec<f64>,
+    #[arg(long, num_args = 1.., required_unless_present = "ratio_count", conflicts_with = "ratio_count")]
+    pub ratios: Option<Vec<f64>>,
+
+    #[arg(long, required_unless_present = "ratios", conflicts_with = "ratios", requires = "step")]
+    pub ratio_count: Option<u32>,
+
+    #[arg(long, conflicts_with = "ratios")]
+    pub step: Option<f64>,
 
     #[arg(long)]
     pub run: bool,
@@ -56,7 +62,6 @@ pub fn run(args: CliArgs)-> Result<()> {
         }
     };
 
-    
     let poscar = File::open(&poscar_path)
         .context(format!("Failed to open POSCAR at {poscar_path:#?}"))?;
     let poscar_reader = BufReader::new(poscar);
@@ -65,7 +70,19 @@ pub fn run(args: CliArgs)-> Result<()> {
     let current_matrix = get_cell_matrix(&mut poscar_lines).
         context("Failed to read cell matrix")?;
 
-    let lattice_params = args.ratios
+    let ratios = match args.ratios {
+        Some(r) => r,
+        None => {
+            let step = args.step
+                .expect("Should be required for ratio_count");
+            let reference = current_matrix[2][2]/current_matrix[0][0];
+            let ratio_count = args.ratio_count
+                .expect("Should be required if ratios are not set");
+            get_ratios(reference, ratio_count, step)?
+        }
+    };
+
+    let lattice_params = ratios
         .iter()
         .map(|&ratio| get_lattice_params(volume, ratio))
         .collect::<Vec<_>>();
@@ -78,7 +95,7 @@ pub fn run(args: CliArgs)-> Result<()> {
     let positions = get_positions(&mut poscar_lines)
         .context("Failed to read positions")?;
 
-    save_poscars(cwd, init_path, args.ratios, cell_matrices, &positions)?;
+    save_poscars(cwd, init_path, ratios, cell_matrices, &positions)?;
 
     if args.run {
         todo!()
