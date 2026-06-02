@@ -41,7 +41,7 @@ NIX_ENFORCE_NO_NATIVE='1'
 export NIX_ENFORCE_NO_NATIVE
 NIX_HARDENING_ENABLE='bindnow format fortify fortify3 libcxxhardeningfast pic relro stackclashprotection stackprotector strictflexarrays1 strictoverflow zerocallusedregs'
 export NIX_HARDENING_ENABLE
-NIX_LDFLAGS='-rpath /home/jay/Projects/rust/volume_relax/outputs/out/lib  -L/nix/store/cq7mnjvabj70qlzk3hv8cj0sp8q6sa4s-rust-stable-with-components-2026-04-16/lib -L/nix/store/cq7mnjvabj70qlzk3hv8cj0sp8q6sa4s-rust-stable-with-components-2026-04-16/lib'
+NIX_LDFLAGS='-rpath /home/jay/Project/rust/ca_search/outputs/out/lib  -L/nix/store/cq7mnjvabj70qlzk3hv8cj0sp8q6sa4s-rust-stable-with-components-2026-04-16/lib -L/nix/store/cq7mnjvabj70qlzk3hv8cj0sp8q6sa4s-rust-stable-with-components-2026-04-16/lib'
 export NIX_LDFLAGS
 NIX_NO_SELF_RPATH='1'
 NIX_STORE='/nix/store'
@@ -136,7 +136,7 @@ name='nix-shell-env'
 export name
 nativeBuildInputs='/nix/store/cq7mnjvabj70qlzk3hv8cj0sp8q6sa4s-rust-stable-with-components-2026-04-16 /nix/store/19w8jjkbn61dicvdfsq7n4kqqvr0sk7y-bacon-3.23.0'
 export nativeBuildInputs
-out='/home/jay/Projects/rust/volume_relax/outputs/out'
+out='/home/jay/Project/rust/ca_search/outputs/out'
 export out
 outputBin='out'
 outputDev='out'
@@ -167,7 +167,7 @@ preConfigurePhases=' updateAutotoolsGnuConfigScriptsPhase'
 declare -a preFixupHooks=('_moveToShare' '_multioutDocs' '_multioutDevs' )
 preferLocalBuild='1'
 export preferLocalBuild
-prefix='/home/jay/Projects/rust/volume_relax/outputs/out'
+prefix='/home/jay/Project/rust/ca_search/outputs/out'
 declare -a propagatedBuildDepFiles=('propagated-build-build-deps' 'propagated-native-build-inputs' 'propagated-build-target-deps' )
 propagatedBuildInputs=''
 export propagatedBuildInputs
