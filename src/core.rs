@@ -85,7 +85,12 @@ pub fn get_positions(lines: &mut Lines<BufReader<File>>) -> Result<Vec<[f64; 3]>
     
     let mut positions = Vec::new();
     for line in lines.by_ref() {
-        let vec = line?
+        let line = line?;
+        if line.is_empty() {
+            break;
+        }
+
+        let vec = line
             .split_whitespace()
             .filter_map(|s| s.parse::<f64>().ok())
             .collect::<Vec<_>>();
