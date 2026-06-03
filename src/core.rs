@@ -86,7 +86,8 @@ pub fn get_positions(lines: &mut Lines<BufReader<File>>) -> Result<Vec<[f64; 3]>
     let mut positions = Vec::new();
     for line in lines.by_ref() {
         let line = line?;
-        if line.is_empty() {
+        
+        if line.trim().is_empty() {
             break;
         }
 
@@ -165,4 +166,26 @@ fn write_poscars(dir: PathBuf, matrix: [[f64; 3]; 3], positions: &[[f64; 3]]) ->
     writer.flush()?;
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use std::io::BufRead;
+
+    use super::*;
+
+    #[test]
+    fn test_positions() {
+        let file = File::open("/home/jay/remote1/p_0/r2scan/CONTCAR").unwrap();
+        let reader = BufReader::new(file);
+        let mut lines = reader.lines();
+
+        for _ in 0..8 {
+            lines.next().unwrap();
+        }
+
+        let positions = get_positions(&mut lines).unwrap();
+        println!("{positions:#?}");
+        todo!()
+    }
 }
