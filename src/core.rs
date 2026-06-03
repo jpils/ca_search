@@ -130,7 +130,7 @@ fn create_dir(ratio: &f64, init: &str, cwd: PathBuf) -> Result<PathBuf> {
         return Err(anyhow!(format!("cwd path not valid at: {cwd:#?}")))
     };
 
-    let path = format!("{cwd_str}/k_{ratio:.4}");
+    let path = format!("{cwd_str}/k_{ratio}");
 
     let status = Command::new("cp")
         .arg("-r")
